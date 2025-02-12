@@ -8,6 +8,7 @@ const teas = {
 
 //Access and print the name and type properties of the tea object
 
-console.log(`The name of the tea is ${teas.name} and the type is ${teas.type} `);
+console.log(`The name of the tea is ${teas.name} and the type is ${teas.type}.`);
+console.log(`But I can also write this as ${teas["type"]}`);
 
 // Add 
