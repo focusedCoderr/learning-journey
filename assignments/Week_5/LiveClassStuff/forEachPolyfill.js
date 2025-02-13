@@ -1,14 +1,14 @@
 const arr =[22,33,44,55,66];
 
-if(!Array.prototype.forEach){
-    Array.prototype.forEach = function(){
+if(!Array.prototype.myforEach){
+    Array.prototype.myforEach = function(){
         for(let i =0; i <this.length; i++){
             userFn(this[i], i, this);
         }
     }
 }
 
-arr.forEach(userFn, this);
+arr.myforEach(userFn, this);
 
 
 function userFn(element, index, arr1){
