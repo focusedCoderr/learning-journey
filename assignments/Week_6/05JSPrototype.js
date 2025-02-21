@@ -14,6 +14,8 @@ ShoppingCart.prototype.getTotalPrice = function(){
         sum += value;
     }
 
+    
+
     return sum;
 }
 
