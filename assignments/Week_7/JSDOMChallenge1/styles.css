@@ -1,0 +1,65 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.items{
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+#bulbContainer{
+    display: flex;
+    justify-content: center;
+}
+
+#bulb{
+    display: flex;
+    justify-content: center;
+    /* background-image: radial-gradient(circle, #FFD700 5%, #2C302E 100%); */
+   width: 100%;
+   /* border: 2px solid red; */
+    
+}
+
+
+
+
+button{
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #6AABB1;
+    padding: 10px;
+    color: black;
+    border-radius: 10px;
+    border-style:solid;
+
+}
+
+p{
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.darkThemeFont{
+    color: white;
+}
+
+.lightThemeFont{
+    color: black;
+}
+
+img{
+ /* background-image: radial-gradient(circle, #FFD700 0.5%, #2C302E 150%); */
+ border-radius: 50 px;
+ /* box-shadow: 5px 5px 100px 2px black inset; */
+}
+
+/* #shadow{
+    box-shadow: 5px 5px 10px 2px black;
+    height: 10 px;
+    width: 10px;
+} */

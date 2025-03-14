@@ -1,0 +1,19 @@
+{
+  "name": "backendpractice",
+  "version": "1.0.0",
+  "description": "i am trying this for the first time",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "node",
+    "backend"
+  ],
+  "author": "Gaurav Yadav",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

@@ -1,0 +1,32 @@
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: large;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    padding : 20px;
+    gap: 20px;
+    
+}
+
+ button{
+    padding: 20px 50px;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: large;
+    text-transform: uppercase;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 2px 2px 2px 2px grey;
+}
+
+button:active{
+    transform: translateY(2px);
+    box-shadow: 2px 2px 5px 2px black;
+
+}
+
+h1{
+    text-transform: uppercase;
+}

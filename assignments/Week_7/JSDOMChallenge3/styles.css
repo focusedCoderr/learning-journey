@@ -1,0 +1,63 @@
+.container{
+    display: flex;
+    justify-content: flex-start;
+}
+
+#formInputWrapper{
+    width: 500px;
+    border: 2px solid black;
+}
+
+.preview{
+    display: flex;
+    justify-content: start;
+    padding: 0px;
+}
+
+#fullWrapper{
+    display: flex;
+    justify-content: center;
+}
+
+label{
+    font-weight: bold;
+    font-size: large;
+}
+
+body{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#fullWrapper > div{
+    width: 60%;
+}
+
+form{
+    width: 100%;
+}
+
+input{
+    width: 100%;
+}
+
+textarea{
+    width: 100%;
+}
+
+#profilePreviewWrapper{
+    display: flex;
+    justify-content: start;
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#lastSection{
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.preview > p{
+    margin: 2px;
+}
