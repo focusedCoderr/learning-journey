@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Task Management</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div>
+            <h1>Task List</h1>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div id="mainInputDiv">
+            <input id="actualInputField" type="text" placeholder="Add a new task..." style="width: 90%;" >
+            <button id="addButton">Add</button>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div id="allTheTasks">
+            <div class="todo">
+                <!-- <input type="checkbox">
+                <p>To drink the chai</p>
+                <button>Delete</button> -->
+                <p>No tasks yet. Add one above!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div>
+            <span>Total tasks: </span><span id="totalTasks"></span>
+            <span>Completed: </span><span id="completedTasks"></span>
+        </div>
+    </div>
+
+    <script src="logic.js"></script>
+</body>
+</html>

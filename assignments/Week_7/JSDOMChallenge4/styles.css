@@ -1,0 +1,23 @@
+.wrapper{
+    display: flex;
+    justify-content: center;
+    border: 2px solid red;
+}
+
+div{
+    border: 2px solid red;
+}
+
+.todo{
+    display: flex;
+}
+
+#mainInputDiv{
+    width: 60%;
+    display: flex;
+    justify-content: center;
+}
+
+#allTheTasks{
+    width: 60%;
+}
