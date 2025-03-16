@@ -4,6 +4,10 @@ const buttonToAdd = document.getElementById("addButton");
 
 const allTasks = document.querySelector("#allTheTasks");
 
+const totalTasks =  document.querySelector("#totalTasks");
+
+const completedTasks = document.querySelector("#completedTasks");
+
 
 buttonToAdd.addEventListener("click", ()=>{
     const dataInInput  = inputField.value;
@@ -22,7 +26,9 @@ buttonToAdd.addEventListener("click", ()=>{
         // deleteButton.setAttribute("class", "deleteBtnClass");
         deleteButton.innerText = "Delete";
         deleteButton.addEventListener("click", ()=>{
-            
+            containerForData.remove();
+            const totalTasksInTheApp = document.getElementsByClassName("actualDataWrapper").length;
+            totalTasks.innerText = totalTasksInTheApp;
         })
 
 
@@ -31,9 +37,13 @@ buttonToAdd.addEventListener("click", ()=>{
         containerForData.appendChild(deleteButton);
         allTasks.appendChild(containerForData);
         inputField.value = "";
+
+        const totalTasksInTheApp =  document.querySelectorAll(".actualDataWrapper").length;
+        totalTasks.innerText = totalTasksInTheApp;
+
+        
     }
 });
-
 
 
 
@@ -56,3 +66,14 @@ buttonToAdd.addEventListener("click", ()=>{
 // .value = ""
 
 // --> add Functionality to the delte button
+
+// 		-- added using remove()
+
+// --> add functionality to total task
+
+// 	nodelist and html collection
+
+// --> add functionality when i press enter
+
+
+
