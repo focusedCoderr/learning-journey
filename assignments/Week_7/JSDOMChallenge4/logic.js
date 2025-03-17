@@ -8,9 +8,32 @@ const totalTasks =  document.querySelector("#totalTasks");
 
 const completedTasks = document.querySelector("#completedTasks");
 
+let completedTasksCounter = 0;
 
-buttonToAdd.addEventListener("click", ()=>{
+function checkIfNoTasks(){
+    const totalTasksPresent = allTasks.childElementCount;
+    if(!totalTasksPresent){
+        const noTasksDiv = document.createElement("div");
+        noTasksDiv.setAttribute("id", "noTasksPresent");
+        const noTaskP = document.createElement("p");
+        noTaskP.innerText = "No tasks yet. Add one above!";
+        noTasksDiv.appendChild(noTaskP);
+        allTasks.appendChild(noTasksDiv);
+    }
+}
+
+checkIfNoTasks();
+
+
+function addTaskFunctionality(){
+    const noTasksPresentDiv = document.getElementById("noTasksPresent");
     const dataInInput  = inputField.value;
+
+    if(noTasksPresentDiv && dataInInput){
+        noTasksPresentDiv.remove();
+    }
+
+    
     if(dataInInput){
         
         const containerForData = document.createElement("div");
@@ -18,23 +41,51 @@ buttonToAdd.addEventListener("click", ()=>{
         
         const checkBox = document.createElement("input");
         checkBox.setAttribute("type", "checkbox");
+
+        checkBox.addEventListener("click", ()=>{
+            if(checkBox.checked){
+                completedTasksCounter++;
+                completedTasks.innerText = completedTasksCounter;
+                dataTag.style.textDecoration = "line-through";
+                dataTag.style.color = "grey";
+                
+            }else{
+                completedTasksCounter--;
+                completedTasks.innerText = completedTasksCounter; 
+                dataTag.removeAttribute("style");
+            }
+
+        });
+
+
         
         const dataTag = document.createElement("p");
         dataTag.innerText = dataInInput;
 
+        const div1 = document.createElement("div");
+        div1.appendChild(checkBox);
+        div1.appendChild(dataTag);
+        const div2 = document.createElement("div");
+
+
         const deleteButton = document.createElement("button");
-        // deleteButton.setAttribute("class", "deleteBtnClass");
         deleteButton.innerText = "Delete";
+        div2.appendChild(deleteButton);
         deleteButton.addEventListener("click", ()=>{
             containerForData.remove();
             const totalTasksInTheApp = document.getElementsByClassName("actualDataWrapper").length;
+            if(checkBox.checked){
+                completedTasksCounter--;
+                completedTasks.innerText = completedTasksCounter;
+
+            }
             totalTasks.innerText = totalTasksInTheApp;
+            checkIfNoTasks();
         })
 
 
-        containerForData.appendChild(checkBox);
-        containerForData.appendChild(dataTag);
-        containerForData.appendChild(deleteButton);
+        containerForData.appendChild(div1);
+        containerForData.appendChild(div2);
         allTasks.appendChild(containerForData);
         inputField.value = "";
 
@@ -43,37 +94,19 @@ buttonToAdd.addEventListener("click", ()=>{
 
         
     }
-});
+}
+
+function identifyKeydownEvent(e){
+    if(e.key === "Enter"){
+        addTaskFunctionality();
+    }
+}
+
+buttonToAdd.addEventListener("click", addTaskFunctionality);
+inputField.addEventListener("keydown", identifyKeydownEvent);
 
 
 
-// 1. querySelector behaviour
-
-
-// next task
-
-// -> append container in the div wrapper
-
-// got to know: did not add text in button
-
-// -> next: add button text
-
-// .innerText
-
-
-// --> remove text from the input field
-
-// .value = ""
-
-// --> add Functionality to the delte button
-
-// 		-- added using remove()
-
-// --> add functionality to total task
-
-// 	nodelist and html collection
-
-// --> add functionality when i press enter
 
 
 

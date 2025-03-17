@@ -1,12 +1,9 @@
 .wrapper{
     display: flex;
     justify-content: center;
-    border: 2px solid red;
 }
 
-div{
-    border: 2px solid red;
-}
+
 
 .todo{
     display: flex;
@@ -20,4 +17,40 @@ div{
 
 #allTheTasks{
     width: 60%;
+    /* border: 2px solid red; */
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    margin-bottom: 20px;
+
+
+}
+
+#noTasksPresent{
+    border: 2px solid black;
+    /* width: 60%; */
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.actualDataWrapper{
+    border: 2px solid black;
+    display: flex;
+    justify-content: space-between;
+    margin: 2px;
+}
+
+.actualDataWrapper > div{
+    display: flex;
+    justify-content: right;
+    padding: 2px;
+}
+
+#actualInputField{
+    height: 30px;
+}
+
+button{
+    width: 100px;
 }
