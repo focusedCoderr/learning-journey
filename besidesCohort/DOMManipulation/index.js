@@ -76,4 +76,4 @@ const firstH2 = document.querySelector(".heading2");
 console.log(firstH2);
 
 
-const inputPass =  document.querySelector('input[type:"password"]']
+const inputPass =  document.querySelector('input[type:"password"]');
