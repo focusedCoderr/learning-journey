@@ -76,5 +76,33 @@ const firstH2 = document.querySelector(".heading2");
 console.log(firstH2);
 
 
-const inputPass =  document.querySelector('input[type:"password"]');
-console.log("Hello");
+// const inputPass =  document.querySelector('input[type:"password"]');
+
+// ***************
+
+// querySelectorAll gives a Nodelist
+
+const allLi =  document.querySelectorAll("li");
+
+allLi.forEach((listItem)=>{
+    listItem.style.color = "green";
+});
+
+// forEach is a method available to NodeList...we can see 
+// that in prototype of NodeList
+
+//but forEach is not available on HTML Collection
+// so we will convert that to Array First.
+// also we can convert nodelist to array as well by same 
+// method
+
+const allLiUsingClassName = document.getElementsByClassName("list-item");
+console.log(allLiUsingClassName);
+
+
+const HTMLCollectionToArray = Array.from(allLiUsingClassName);
+ 
+
+HTMLCollectionToArray.forEach((eachListItem)=>{
+    eachListItem.style.color = "orange";
+});
