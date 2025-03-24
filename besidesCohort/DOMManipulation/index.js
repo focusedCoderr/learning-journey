@@ -77,3 +77,4 @@ console.log(firstH2);
 
 
 const inputPass =  document.querySelector('input[type:"password"]');
+console.log("Hello");
