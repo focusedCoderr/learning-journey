@@ -11,12 +11,14 @@ const googleLink = document.getElementById("google");
 // true value means event capturing or trickling. below example
 // shows its working
 
+// e.stopPropagation() will stop propagation
+
 
 // ul.addEventListener("click", (e)=>{
 //     console.log("Clicked inside ul");
 //     console.log(e);
     
-// }, true);
+// }, false);
 
 // owl.addEventListener("click",(e)=>{
 //     console.log("Owl Clicked");
@@ -30,6 +32,7 @@ const googleLink = document.getElementById("google");
 // boolean value, whether default behaviour was prevented or not
 
 googleLink.addEventListener("click", (e)=>{
+    e.stopPropagation();
     e.preventDefault();
     console.log(`The default behaviour was prevented : ${e.defaultPrevented}`);
     
@@ -48,10 +51,64 @@ googleLink.addEventListener("click", (e)=>{
 // toElement : where the mouse cursor went after the event
 // usually used with mouseover and mouseout events.
 
-ul.addEventListener("click",(e)=>{
-    console.log(e.target);
-    console.log(e.currentTarget);
-    console.log(e.srcElement, "hello");
+// ul.addEventListener("click",(e)=>{
+//     console.log(e.target);
+//     console.log(e.currentTarget);
+//     console.log(e.srcElement);
+// }, false);
+
+const toElementShow = document.getElementById("parent");
+
+toElementShow.addEventListener("mouseout", (e)=>{
+    console.log(`Moved to ${e.toElement}`);
+}, false);
+
+// clientX, clientY, screenX, screenY
+
+// clientx and y are mouse position with respect to 
+// the browser
+
+// screenx and y are mouse position with respect to
+// the entire screen
+
+// document.body.addEventListener("mousemove", (e)=>{
+//     console.log("reference from browser");
+    
+//     console.log(`X: ${e.clientX} Y:${e.clientY}`);
+//     console.log("reference from window");
+
+//     console.log(`X: ${e.screenX} Y:${e.screenY}`);   
+// }, false);
+
+// e.key and e.code
+const showData = document.querySelector("#input").nextElementSibling;
+
+document.querySelector("#input").addEventListener("keydown", (e)=>{
+    console.log(e.key);
+    console.log(e.code);
+    console.log(e.shiftKey); // whether shift key was pressed: boolean
+    console.log(e.ctrlKey); // whether ctrl key was pressed: boolean
+    console.log(e.altKey); // whether alt key was pressed: boolean
+    console.log(e);
+    
+    
+    showData.innerText = showData.previousElementSibling.value;
+    
     
 }, false);
 
+// parentNode, e.target.tagName
+
+ul.addEventListener("click", (e)=>{
+    console.log(e);
+    
+    const toBeRemoved = e.target.parentNode;
+    console.log((toBeRemoved));
+    if(e.target.tagName === "IMG"){
+        // toBeRemoved.remove();
+        toBeRemoved.parentNode.removeChild(toBeRemoved);
+
+    }
+    
+    
+}, false);
