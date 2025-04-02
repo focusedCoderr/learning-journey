@@ -12,9 +12,7 @@
 	padding: 20px;
 }
 
-.todo-board,
-.inProgress-board,
-.done-board {
+.board {
 	border: 2px solid white;
 	border-radius: 10px;
 	height: 80vh;
@@ -27,14 +25,18 @@
 
 .itemWrapperKaDiv {
 	width: 90%;
-	border: 2px solid white;
-	border-radius: 7px;
+	
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
+
+
 .itemWrapper {
 	padding: 10px;
+	border: 2px solid white;
+	border-radius: 7px;
+	margin-top: 10px;
 }
 
 .button-54 {

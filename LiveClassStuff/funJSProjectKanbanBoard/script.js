@@ -1,38 +1,54 @@
-const addInDiv1 = document.getElementById("div1");
-const addInDiv2 = document.getElementById("div2");
-const addInDiv3 = document.getElementById("div3");
-
 const addButtons = document.querySelectorAll(".button-54");
 
+const boards = document.querySelectorAll(".board");
+
 addButtons.forEach((button) => {
-	button.addEventListener("click", () => {
-		const buttonId = button.getAttribute("id");
-		const buttonNumber = Number(buttonId.slice(3));
-		const divId = "div" + buttonNumber;
-		const divInWhichItemToBeAdded = document.getElementById(divId);
-		addItem(divInWhichItemToBeAdded);
-	});
+  button.addEventListener("click", () => {
+    const buttonId = button.getAttribute("id");
+    const buttonNumber = Number(buttonId.slice(3));
+    const divId = "div" + buttonNumber;
+    const divInWhichItemToBeAdded = document.getElementById(divId);
+    addItem(divInWhichItemToBeAdded);
+  });
 });
 
 function addItem(divInWhichToBeAdded) {
-	// create wrapper Div
-	const itemWrapper = document.createElement("div");
-	itemWrapper.setAttribute("class", "itemWrapper");
+  // create wrapper Div
+  const itemWrapper = document.createElement("div");
+  itemWrapper.setAttribute("class", "itemWrapper");
+  itemWrapper.setAttribute("draggable", true);
 
-	// create item
-	const item = document.createElement("p");
-	item.setAttribute("class", "item");
+  // add event listeners for drag start and drag end events
+  itemWrapper.addEventListener("dragstart", (e) => {
+    console.log("I have started flying");
+    console.log(e);
+  });
 
-	// Insert Text in p tag
-	const textNode = document.createTextNode(Math.ceil(Math.random() * 2));
-	// textNode.textContent = ;
+  itemWrapper.addEventListener("dragend", () => {
+    console.log("I have ended flying");
+  });
 
-	// append Text Node in item p tag
-	item.appendChild(textNode);
+  // create item
+  const item = document.createElement("p");
+  item.setAttribute("class", "item");
 
-	// append item in wrapperDiv
-	itemWrapper.appendChild(item);
+  // Insert Text in p tag
+  const textNode = document.createTextNode(Math.ceil(Math.random() * 2));
+  // textNode.textContent = ;
 
-	// add wrapperDiv in the element
-	divInWhichToBeAdded.appendChild(itemWrapper);
+  // append Text Node in item p tag
+  item.appendChild(textNode);
+
+  // append item in wrapperDiv
+  itemWrapper.appendChild(item);
+
+  // add wrapperDiv in the element
+  divInWhichToBeAdded.appendChild(itemWrapper);
 }
+
+boards.forEach((board) => {
+  board.addEventListener("dragover", (e) => {
+    console.log("Hello, something flew over me");
+    console.log(e);
+  });
+});
