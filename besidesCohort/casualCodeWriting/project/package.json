@@ -1,0 +1,22 @@
+{
+	"name": "tryingwithoutlookingatthecode",
+	"version": "1.0.0",
+	"description": "will try to connect to the mongo db...use cors, write schema using mongoose install nodemon use env files make utils like async handler andd api errors.",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"dev": "node index.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.7",
+		"express": "^5.1.0",
+		"express-validator": "^7.2.1",
+		"mongoose": "^8.13.2"
+	},
+	"devDependencies": {
+		"prettier": "^3.5.3"
+	}
+}
