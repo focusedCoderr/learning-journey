@@ -25,6 +25,10 @@
 18. make api-error.js file in utilities in which we will make a class which will inherit the
     Error class and we will try to standarize the errors that we will ecounter during making this project
 19. make api-response.js --> utils --> to standarize responses
-20.
+20. make a constants enum file in utils
+21. make async-handler.js in utils
+22.
 
 ### Password for Mongo DB : gaurav123
+
+#### Task 1: Demystify error class in nodejs... check this.errors, this.stack etc
