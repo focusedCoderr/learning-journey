@@ -27,8 +27,13 @@
 19. make api-response.js --> utils --> to standarize responses
 20. make a constants enum file in utils
 21. make async-handler.js in utils
-22.
+22. make all the models
+23. hash the password
 
 ### Password for Mongo DB : gaurav123
 
 #### Task 1: Demystify error class in nodejs... check this.errors, this.stack etc
+
+#### Task 2: Study 'required' in mongoose
+
+#### Task 3: Study 'index' in mongoose. We used it in username and set it true
