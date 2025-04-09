@@ -1,0 +1,12 @@
+{
+	"name": "buildingfullstackproject",
+	"version": "1.0.0",
+	"description": "we will learn",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"author": "",
+	"license": "ISC"
+}
