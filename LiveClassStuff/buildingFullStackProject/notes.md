@@ -8,4 +8,12 @@
 3. app.use(express.urlencoded({ extended: true })); <-- backend says that in the url when info is sent like space
    and it gets converted to %20 ---then backend can understand what is said in the url
 
-4.
+#### DB methods to study:
+
+1. findOne();
+2. create();
+
+in controller write controller for register -->
+
+take data from body
+validate data --> get error from postman when data not sent
