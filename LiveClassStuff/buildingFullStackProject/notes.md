@@ -13,6 +13,15 @@
 1. findOne();
 2. create();
 
+--> mongoose gives hooks pre and post
+
+--> if something is encryped it can be decrypted
+
+--> if something is hashed, it cannot be unhashed..so when we hash a password, in order to match the password in the
+future we will have to match their hashed versions
+
+--> Study jwt
+
 in controller write controller for register -->
 
 take data from body
