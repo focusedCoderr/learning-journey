@@ -49,7 +49,7 @@ const registerUser = async (req, res) => {
 			secure: false, // true for port 465, false for other ports
 			auth: {
 				user: process.env.MAILTRAP_USERNAME,
-				pass: process.env.MAILTRAP_HOST,
+				pass: process.env.MAILTRAP_PASSWORD,
 			},
 		});
 
@@ -104,8 +104,11 @@ const verifyUser = async (req, res) => {
 	}
 
 	verifiedUser.isVerified = true;
-	verifiedUser.verificationToken = undefined;
+	verifiedUser.verificationToken = null;
 	await verifiedUser.save();
+	res.status(202).json({
+		message: "User verified. response sent",
+	});
 };
 
 const acceptPost = async (req, res) => {
@@ -130,7 +133,15 @@ const login = async (req, res) => {
 			});
 		}
 
+		console.log("Gu");
+		console.log(existingUser);
+		console.log("su");
+
+		console.log(existingUser.password);
+
 		const isMatch = await bcrypt.compare(password, existingUser.password);
+		console.log(isMatch);
+		console.log("Bye");
 
 		if (!isMatch) {
 			return res.status(400).json({
@@ -159,7 +170,9 @@ const login = async (req, res) => {
 			success: true,
 			message: "Login successful",
 		});
-	} catch (error) {}
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 export { registerUser, acceptPost, verifyUser, login };
