@@ -124,9 +124,8 @@ const login = async (req, res) => {
 			message: "All fields are required",
 		});
 	}
-
 	try {
-		const existingUser = User.findOne({ email });
+		const existingUser = await User.findOne({ email });
 		if (!existingUser) {
 			return res.status(400).json({
 				message: "Invalid email or password",
@@ -153,7 +152,7 @@ const login = async (req, res) => {
 			{
 				id: existingUser._id,
 			},
-			"shhhh",
+			process.env.JWT_SECRET,
 			{
 				expiresIn: "24h",
 			}
@@ -175,4 +174,32 @@ const login = async (req, res) => {
 	}
 };
 
-export { registerUser, acceptPost, verifyUser, login };
+const getMe = async (req, res) => {
+	try {
+	} catch (error) {}
+};
+
+const logout = async (req, res) => {
+	try {
+	} catch (error) {}
+};
+
+const forgotPassword = async (req, res) => {
+	try {
+	} catch (error) {}
+};
+
+const resetPassword = async (req, res) => {
+	try {
+	} catch (error) {}
+};
+export {
+	registerUser,
+	acceptPost,
+	verifyUser,
+	login,
+	getMe,
+	logout,
+	forgotPassword,
+	resetPassword,
+};
