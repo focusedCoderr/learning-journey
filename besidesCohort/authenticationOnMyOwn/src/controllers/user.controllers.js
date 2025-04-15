@@ -1,4 +1,5 @@
 import { User } from "../models/user.models.js";
+import bcrypt from "bcryptjs";
 
 const checkWorkingFunctionality = async (req, res) => {
 	res.status(201).json({
@@ -22,6 +23,8 @@ const registerUser = async (req, res) => {
 		});
 	}
 
-	User.create();
+	const newUser = await User.create({ name, email, password });
+
+	const token = await bcrypt.hash();
 };
 export { checkWorkingFunctionality, registerUser };
