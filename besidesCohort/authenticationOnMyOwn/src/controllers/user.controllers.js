@@ -30,6 +30,7 @@ const registerUser = async (req, res) => {
 
 		const token = crypto.randomBytes(32).toString("hex");
 		newUser.verificationToken = token;
+		console.log(newUser);
 
 		// send email
 
@@ -71,6 +72,7 @@ const registerUser = async (req, res) => {
 		});
 	}
 };
+
 
 const verifyUser = async (req, res) => {
 	const { token } = req.params;
