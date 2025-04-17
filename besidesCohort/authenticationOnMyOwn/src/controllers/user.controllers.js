@@ -75,6 +75,21 @@ const registerUser = async (req, res) => {
 const verifyUser = async (req, res) => {
 	const { token } = req.params;
 	const existingUser = await User.findOne({ verificationToken: token });
-	console.log(existingUser);
+
+	if (!existingUser) {
+		return res.status(400).json({
+			message: "Wrong token",
+		});
+	}
+
+	existingUser.isVerified = true;
+
+	//null will keep the key and set value to null,
+	// but if value is undefined, mongodb treats it as
+	// if this key doesn't exist and it will not be
+	// shown in the document
+	existingUser.verificationToken = undefined;
+	// existingUser.verificationToken = null;
+	await existingUser.save();
 };
 export { checkWorkingFunctionality, registerUser, verifyUser };
