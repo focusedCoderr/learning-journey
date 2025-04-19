@@ -103,6 +103,29 @@ const verifyUser = async (req, res) => {
 	}
 };
 
-const login = async (req, res) => {};
+const login = async (req, res) => {
+	const { email, password } = req.body;
+	if (!email || !password) {
+		return res.status(400).json({
+			message: "Please enter both username and password",
+		});
+	}
+
+	try {
+		const existingUser = await User.findOne({ email });
+		if (!existingUser) {
+			return res.json({
+				message: "User does not exist. Please register first",
+			});
+		}
+
+		const allowLogin = await bcrypt.compare(password, existingUser.password);
+		if (!allowLogin) {
+			return res.status(400).json({
+				message: "Please enter correct password",
+			});
+		}
+	} catch (error) {}
+};
 
 export { checkWorkingFunctionality, registerUser, verifyUser };
