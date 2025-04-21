@@ -131,7 +131,7 @@ const login = async (req, res) => {
 
 		if (!existingUser.isVerified) {
 			return res.status(400).json({
-				message: "Please verify your email and password",
+				message: "Please verify your email  ",
 			});
 		}
 
