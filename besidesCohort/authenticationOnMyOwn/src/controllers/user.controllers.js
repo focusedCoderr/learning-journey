@@ -1,6 +1,7 @@
 import { User } from "../models/user.models.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
 
 const checkWorkingFunctionality = async (req, res) => {
 	res.status(201).json({
@@ -125,6 +126,43 @@ const login = async (req, res) => {
 				message: "Please enter correct password",
 			});
 		}
+
+		//check whether user is verified or not - do it yourself
+
+		if (!existingUser.isVerified) {
+			return res.status(400).json({
+				message: "Please verify your email and password",
+			});
+		}
+
+		const idOfUser = existingUser._id;
+		const secret = process.env.JWT_SECRET;
+		const payload = {
+			id: idOfUser,
+		};
+
+		const token = jwt.sign(payload, secret, {
+			expiresIn: "24h",
+		});
+
+		console.log(token);
+
+		const cookieOptions = {
+			httpOnly: true,
+			secure: true,
+			maxAge: 24 * 60 * 60 * 1000,
+		};
+		res.cookies("token", token, cookieOptions);
+		res.status(200).json({
+			message: "User logged in",
+			success: true,
+			token,
+			user: {
+				id: existingUser._id,
+				name: existingUser.name,
+				role: existingUser.role,
+			},
+		});
 	} catch (error) {}
 };
 

@@ -2,6 +2,7 @@ import express, { urlencoded } from "express";
 import "dotenv/config";
 import cors from "cors";
 import dbconnect from "./utils/dbconnect.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +20,8 @@ app.use(
 		extended: true,
 	})
 );
+
+app.use(cookieParser());
 // connect db
 
 dbconnect();
