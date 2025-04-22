@@ -2,6 +2,7 @@ import { User } from "../models/user.models.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 const checkWorkingFunctionality = async (req, res) => {
 	res.status(201).json({
@@ -105,12 +106,23 @@ const verifyUser = async (req, res) => {
 };
 
 const login = async (req, res) => {
-	const { email, password } = req.body;
+	let { email, password } = req.body;
 	if (!email || !password) {
 		return res.status(400).json({
 			message: "Please enter both username and password",
 		});
 	}
+	console.log(typeof password);
+
+	if (typeof password !== "string") {
+		// console.log(typeof password);
+		// return res.status(400).json({
+		// 	message: "please pass a string password",
+		// });
+		password = String(password);
+	}
+	console.log(typeof password);
+	console.log(password);
 
 	try {
 		const existingUser = await User.findOne({ email });
@@ -121,6 +133,12 @@ const login = async (req, res) => {
 		}
 
 		const allowLogin = await bcrypt.compare(password, existingUser.password);
+		// console.log(password);
+		// console.log(existingUser.password);
+
+		// const hashedNewPassword = await bcrypt.hash(password, 10);
+		// console.log(hashedNewPassword);
+
 		if (!allowLogin) {
 			return res.status(400).json({
 				message: "Please enter correct password",
@@ -152,7 +170,7 @@ const login = async (req, res) => {
 			secure: true,
 			maxAge: 24 * 60 * 60 * 1000,
 		};
-		res.cookies("token", token, cookieOptions);
+		res.cookie("token", token, cookieOptions);
 		res.status(200).json({
 			message: "User logged in",
 			success: true,
@@ -163,7 +181,36 @@ const login = async (req, res) => {
 				role: existingUser.role,
 			},
 		});
+	} catch (error) {
+		console.log("Error logging in ", error);
+		return res.status(400).json({
+			message: "Not logged in",
+			error,
+		});
+	}
+};
+
+const getMe = async (req, res) => {};
+
+const logoutUser = async (req, res) => {};
+
+const resetPassword = async (req, res) => {
+	try {
 	} catch (error) {}
 };
 
-export { checkWorkingFunctionality, registerUser, verifyUser };
+const forgotPassword = async (req, res) => {
+	try {
+	} catch (error) {}
+};
+
+export {
+	checkWorkingFunctionality,
+	registerUser,
+	verifyUser,
+	login,
+	getMe,
+	logoutUser,
+	resetPassword,
+	forgotPassword,
+};
