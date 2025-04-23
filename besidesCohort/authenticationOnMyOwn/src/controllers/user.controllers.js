@@ -190,18 +190,132 @@ const login = async (req, res) => {
 	}
 };
 
-const getMe = async (req, res) => {};
-
-const logoutUser = async (req, res) => {};
-
-const resetPassword = async (req, res) => {
+const getMe = async (req, res) => {
 	try {
-	} catch (error) {}
+		const userTryingToGetProfile = req.user;
+		const userInDb = await User.findById(userTryingToGetProfile.id).select(
+			"-password"
+		);
+
+		if (!userInDb) {
+			return res.status(400).json({
+				message: "No User found",
+			});
+		}
+
+		return res.status(200).json({
+			success: true,
+			userInDb,
+		});
+	} catch (error) {
+		return res.status(400).json({
+			message: "error getting the profile of user",
+		});
+	}
+};
+
+const logoutUser = async (req, res) => {
+	try {
+		res.cookie("token", "", {
+			expires: new Date(0),
+		});
+
+		return res.status(200).json({
+			message: "User logged out successfully",
+			success: true,
+		});
+	} catch (error) {
+		return res.status(400).json({
+			message: "Could not log out user",
+			success: false,
+		});
+	}
 };
 
 const forgotPassword = async (req, res) => {
 	try {
-	} catch (error) {}
+		const emailOfUser = req.body.email;
+		const existingUser = await User.findOne({ email: emailOfUser });
+
+		if (!existingUser) {
+			return res.status(400).json({
+				message: "Email not registered",
+				success: false,
+			});
+		}
+
+		const resetPassToken = crypto.randomBytes(32).toString("hex");
+		console.log(resetPassToken);
+		const resetPassExpiry = Date.now() + 10 * 60 * 1000;
+		existingUser.resetPasswordToken = resetPassToken;
+		existingUser.resetPasswordExpires = resetPassExpiry;
+
+		const transporter = nodemailer.createTransport({
+			host: process.env.MAILTRAP_HOST,
+			port: process.env.MAILTRAP_PORT,
+			secure: false, // true for port 465, false for other ports
+			auth: {
+				user: process.env.MAILTRAP_USERNAME,
+				pass: process.env.MAILTRAP_PASSWORD,
+			},
+		});
+
+		const mailOptions = {
+			from: process.env.MAILTRAP_SENDEREMAIL, // sender address
+			to: existingUser.email, // list of receivers
+			subject: "Here's the link to reset your password", // Subject line
+			text: "This message contains the link to reset your password!", // plain text body
+			html: `
+				<p>Please click <a href="${process.env.BASE_URL}${process.env.BASE_EXTENSION}resetYourPassword/${resetPassToken}">here</a> 
+				to reset your password</p>
+			`, // html body
+		};
+
+		const info = await transporter.sendMail(mailOptions);
+
+		await existingUser.save();
+	} catch (error) {
+		return res.status(400).json({
+			message: "reset password failed",
+		});
+	}
+};
+
+const resetPassword = async (req, res) => {
+	try {
+		const { token } = req.params;
+		const { password, confPassword } = req.body;
+
+		if (password !== confPassword) {
+			return res.status(400).json({
+				message: "password and confirm passwords do not match",
+			});
+		}
+
+		const existingUser = await User.findOne({
+			resetPasswordToken: token,
+			resetPasswordExpires: { $gt: Date.now() },
+		});
+
+		if (!existingUser) {
+			return res.status(400).json({
+				message: "Either user not found or reset window expired",
+			});
+		}
+
+		existingUser.password = password;
+		existingUser.resetPasswordToken = null;
+		existingUser.resetPasswordExpires = null;
+		await existingUser.save();
+
+		res.status(200).json({
+			message: "Password resetted successfully. Please login with new password",
+		});
+	} catch (error) {
+		return res.status(400).json({
+			message: "Password not resetted",
+		});
+	}
 };
 
 export {
