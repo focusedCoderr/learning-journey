@@ -28,3 +28,24 @@ npm i express || ANY_PACKAGE_NAME --> package-lock.json created && node_modules 
 --> keeps track of what packages are installed and general info about the project.
 
 --> does not track dependencies
+
+##### Task:
+
+--> create your own express using http module
+--> make simple --> handles get and post request
+--> keep in mind that basically express is wrapper around the things that you do using http module
+--> make in way that --> user gives you routes using your handler function and those routes get registered internally
+
+--> use req.method and req.url given by node and create a layer
+
+--> CREATE SOMETHING LIKE THIS:
+
+```js
+const c = require("cohortjs");
+
+c.getCallPr("/", function () {});
+
+c.suno(8000).aurPhir(() => {
+	console.log("Server is listening on this port");
+});
+```

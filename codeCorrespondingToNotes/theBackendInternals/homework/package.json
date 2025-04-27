@@ -1,0 +1,16 @@
+{
+	"name": "cohortjs",
+	"version": "1.0.0",
+	"description": "i will try to write the functionality of express and use my cohortjs instead of express js for simple get and put requests",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node ./src/index.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"dotenv": "^16.5.0",
+		"express": "^5.1.0"
+	}
+}
