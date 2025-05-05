@@ -39,3 +39,5 @@
 --> standardize errors -> apiError class extends Error class ->
 
 --> standardize response -> make class -> write constructor
+
+--> make constants file -> in utils
