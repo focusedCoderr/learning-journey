@@ -1,0 +1,3 @@
+--> npm init will create a package.json file
+--> npm install will install all the packages from the package-lock.json file
+--> app.use(express.json()) -> telling server that frontend can be sending json data
