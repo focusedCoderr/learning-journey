@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-
-dotenv.config({
-	path: "../../.env",
-});
+import { ApiResponse } from "../utils/api-response.js";
 
 const connectDB = async () => {
 	try {
