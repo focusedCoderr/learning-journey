@@ -84,9 +84,14 @@ examples -> look later when you have experimented on your own : in all the examp
 
 All this happens from whichever folder node process is started that becomes the cwd and dotenv is imported in the process and relative to this process's location, dotenv tries to read the .env file based on the path given in config() and finally after reading the .env file the variables are set in process.env object
 
-
 --> Write aysncHandler in utils to eliminate the need for using try catch in functions or for efficient error handling
 
+--> write validators and learn how to use them -> learn the flow
 
+--> src-> validators -> index.js -> write userRegistrationValidator, userLoginValidator functions and so on and export them
 
+--> src-> middlewares -> validator.middlewares.js -> validate function which will extract errors if any and return error
 
+--> src -> routes -> auth.routes.js -> learn how to use this middleware--> it uses something known as factory patterns -> include your learning here
+
+--> install mailgen and nodemailer

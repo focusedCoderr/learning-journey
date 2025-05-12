@@ -6,3 +6,5 @@ const registerUser = asyncHandler(async (req, res) => {
 
 	registrationValidation(body);
 });
+
+export { registerUser };
