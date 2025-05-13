@@ -6,7 +6,7 @@ const sendmail = async (options) => {
 		theme: "default",
 		product: {
 			// Appears in header & footer of e-mails
-			name: "Mailgen",
+			name: "My App",
 			link: "https://mailgen.js/",
 			// Optional product logo
 			// logo: 'https://mailgen.js/img/logo.png'
@@ -81,4 +81,8 @@ const forgotPasswordGenerateContent = function (username, passwordResetUrl) {
 	};
 };
 
-export { sendmail };
+export {
+	sendmail,
+	emailVerificationGenerateContent,
+	forgotPasswordGenerateContent,
+};
