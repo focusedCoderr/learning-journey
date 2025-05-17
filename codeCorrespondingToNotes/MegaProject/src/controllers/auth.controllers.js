@@ -11,6 +11,23 @@ import {
 } from "../utils/mail.js";
 import jwt from "jsonwebtoken";
 
+const generateAccessAndRefreshToken = async (userId) => {
+	try {
+		const existingUser = await User.findById(userId);
+		const accessToken = existingUser.generateAccessToken();
+		const refreshToken = existingUser.generateRefreshToken();
+		existingUser.refreshToken = refreshToken;
+		await existingUser.save({ validateBeforeSave: false });
+
+		return { accessToken, refreshToken };
+	} catch (error) {
+		throw new ApiError(
+			500,
+			"Something went wrong while generating refresh and access token",
+		);
+	}
+};
+
 const registerUser = asyncHandler(async (req, res, next) => {
 	const { email, username, password } = req.body;
 	//validation already done in the middleware
@@ -63,6 +80,57 @@ const registerUser = asyncHandler(async (req, res, next) => {
 	);
 
 	return res.status(response.statusCode).json(response);
+});
+
+const loginUserYoutube = asyncHandler(async (req, res, next) => {
+	const { username, email, password } = req.body;
+
+	if (!username && !email) {
+		throw new ApiError(400, "Username or password is required");
+	}
+
+	const existingUser = User.findOne({
+		$or: [{ username }, { email }],
+	});
+
+	if (!existingUser) {
+		throw new ApiError(404, "user does not exist");
+	}
+
+	const isPasswordValid = await existingUser.isPasswordCorrect(password);
+
+	if (!isPasswordValid) {
+		throw new ApiError(401, "Invalid user credentials");
+	}
+
+	const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+		existingUser._id,
+	);
+
+	const loggedInUser = await User.findById(existingUser._id).select(
+		"-password -refreshToken",
+	);
+
+	const options = {
+		httpOnly: true,
+		secure: true,
+	};
+
+	return res
+		.status(200)
+		.cookie("accessToken", accessToken, options)
+		.cookie("refreshToken", refreshToken, options)
+		.json(
+			new ApiResponse(
+				200,
+				{
+					user: loggedInUser,
+					accessToken,
+					refreshToken,
+				},
+				"User logged in successfully",
+			),
+		);
 });
 
 const loginUser = asyncHandler(async (req, res, next) => {
