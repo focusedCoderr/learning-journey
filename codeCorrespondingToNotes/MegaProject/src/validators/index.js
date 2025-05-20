@@ -20,9 +20,9 @@ const userRegistrationValidator = () => {
 			.trim()
 			.notEmpty()
 			.withMessage("Password is required")
-			.isLength({ min: 6 })
+			.isLength({ min: 3 })
 			.withMessage("Password must be atleast 6 characters long")
-			.isLength({ max: 12 })
+			.isLength({ max: 13 })
 			.withMessage("Password must be less than 12 characters long"),
 	];
 };
@@ -39,16 +39,16 @@ const userLoginValidator = () => {
 			.trim()
 			.notEmpty()
 			.withMessage("Password is required")
-			.isLength({ min: 6 })
-			.withMessage("Password must be atleast 6 characters long")
+			.isLength({ min: 3 })
+			.withMessage("Password must be atleast 3 characters long")
 			.isLength({ max: 12 })
 			.withMessage("Password must be less than 12 characters long"),
 		body("username")
 			.trim()
 			.notEmpty()
 			.withMessage("Username is required")
-			.isLength({ min: 6 })
-			.withMessage("Username should be atleast 6 characters long")
+			.isLength({ min: 3 })
+			.withMessage("Username should be atleast 3 characters long")
 			.isLength({ max: 12 })
 			.withMessage("Username should be less than 13 characters"),
 	];

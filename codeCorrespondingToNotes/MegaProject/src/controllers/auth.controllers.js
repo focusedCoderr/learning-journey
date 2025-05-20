@@ -87,20 +87,21 @@ const registerUser = asyncHandler(async (req, res, next) => {
 const loginTheUser = asyncHandler(async (req, res, next) => {
 	const { email, username, password } = req.body;
 
-	const existingUser = User.findOne({
+	const existingUser = await User.findOne({
 		$or: [{ email }, { username }],
 	});
 
 	if (!existingUser) {
 		const err = new ApiError(400, "Invalid credentials");
-		next(err);
+		return next(err);
 	}
-
+	// const hashedPass = await bcrypt.hash(password, 10);
+	// console.log(hashedPass);
 	const isPasswordValid = await existingUser.isPasswordCorrect(password);
 
 	if (!isPasswordValid) {
 		const err = new ApiError(400, "Invalid credentials provided by user");
-		next(err);
+		return next(err);
 	}
 
 	const { AccessToken, RefreshToken } = generateAccessAndRefreshTokens(
