@@ -43,6 +43,14 @@ const userLoginValidator = () => {
 			.withMessage("Password must be atleast 6 characters long")
 			.isLength({ max: 12 })
 			.withMessage("Password must be less than 12 characters long"),
+		body("username")
+			.trim()
+			.notEmpty()
+			.withMessage("Username is required")
+			.isLength({ min: 6 })
+			.withMessage("Username should be atleast 6 characters long")
+			.isLength({ max: 12 })
+			.withMessage("Username should be less than 13 characters"),
 	];
 };
 export { userRegistrationValidator, userLoginValidator };
