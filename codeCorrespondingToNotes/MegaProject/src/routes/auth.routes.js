@@ -5,19 +5,24 @@ import {
 } from "../validators/index.js";
 import { validate } from "../middlewares/validator.middlewares.js";
 
-import { registerUser, loginUser } from "../controllers/auth.controllers.js";
-import { isLoggedIn } from "../middlewares/auth.middlewares.js";
+import {
+	registerUser,
+	loginTheUser,
+	logoutUser,
+	generateNewAccessTokenAndRefreshToken,
+} from "../controllers/auth.controllers.js";
+import { verifyJWT } from "../middlewares/authFinal.middlewares.js";
 
-import { logoutUser } from "../controllers/auth2.controllers.js";
 const router = Router();
 
 router
 	.route("/register")
 	.post(userRegistrationValidator(), validate, registerUser);
 
-router.route("/login").post(userLoginValidator(), validate, loginUser);
+router.route("/login").post(userLoginValidator(), validate, loginTheUser);
 
-router.route("/logout").post(isLoggedIn, logoutUser);
+router.route("/logout").post(verifyJWT, logoutUser);
 
-router.route("/getAccessToken").post(generateNewAccessAndRefreshToken);
+router.route("/getAccessToken").post(generateNewAccessTokenAndRefreshToken);
+
 export default router;

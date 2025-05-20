@@ -4,6 +4,8 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser);
+app.use(express.urlencoded({ extended: true }));
+
 //router imports
 import healthCheckRouter from "./routes/healthcheck.routes.js";
 import authRouter from "./routes/auth.routes.js";

@@ -133,10 +133,82 @@ const loginTheUser = asyncHandler(async (req, res, next) => {
 		);
 });
 
-const logoutUser = asyncHandler(async (req, res, next) => {});
+const logoutUser = asyncHandler(async (req, res, next) => {
+	await User.findByIdAndUpdate(req.user._id, {
+		$set: {
+			refreshToken: undefined,
+		},
+	});
+
+	const cookieOptions = {
+		httpOnly: true,
+		secure: true,
+	};
+
+	return res
+		.status(200)
+		.clearCookie("accessToken", cookieOptions)
+		.clearCookie("refreshToken", cookieOptions)
+		.json(new ApiResponse(200, {}, "User Logged out"));
+});
+
+const generateNewAccessTokenAndRefreshToken = asyncHandler(
+	async (req, res, next) => {
+		const refreshTokenFromCookies = req.cookies?.refreshToken;
+
+		if (!refreshTokenFromCookies) {
+			throw new ApiError(400, "No refresh token present");
+		}
+
+		const decodedData = jwt.verify(
+			refreshTokenFromCookies,
+			process.env.REFRESH_TOKEN_SECRET,
+		);
+
+		if (!decodedData) {
+			return next(new ApiError(400, "Token not valid"));
+		}
+
+		const userFromDB = await User.findById(decodedData.id);
+
+		if (!userFromDB) {
+			throw new ApiError(400, "User not found");
+		}
+
+		const { AccessToken, RefreshToken } = generateAccessAndRefreshTokens(
+			userFromDB._id,
+		);
+
+		const cookieOptions = {
+			httpOnly: true,
+			secure: true,
+		};
+
+		return res
+			.status(200)
+			.cookie("accessToken", AccessToken)
+			.cookie("refreshToken", RefreshToken)
+			.json(
+				new ApiResponse(
+					200,
+					{
+						user: userFromDB,
+						AccessToken,
+						RefreshToken,
+					},
+					"Refresh Token and Access Token generated successfully",
+				),
+			);
+	},
+);
 
 const verifyEmail = asyncHandler(async (req, res, next) => {});
 
 const resendVerificationEmail = asyncHandler(async (req, res, next) => {});
 
-export { registerUser, loginUser };
+export {
+	registerUser,
+	loginTheUser,
+	logoutUser,
+	generateNewAccessTokenAndRefreshToken,
+};
