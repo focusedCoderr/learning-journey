@@ -64,8 +64,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
-	console.log(await bcrypt.hash(password, 10));
-	console.log(this.password);
+	console.log(password);
 	return await bcrypt.compare(password, this.password);
 };
 

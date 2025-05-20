@@ -15,9 +15,10 @@ const generateAccessAndRefreshTokens = async (userId) => {
 	try {
 		const userFromDB = await User.findById(userId);
 
-		const AccessToken = userFromDB.generateAccessToken();
-		const RefreshToken = userFromDB.generateRefreshToken();
-
+		const AccessToken = await userFromDB.generateAccessToken();
+		const RefreshToken = await userFromDB.generateRefreshToken();
+		console.log(`Access token is : ${AccessToken}`);
+		console.log(`Refresh token is : ${RefreshToken}`);
 		userFromDB.refreshToken = RefreshToken;
 		userFromDB.save({ validateBeforeSave: false });
 
@@ -50,11 +51,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
 		);
 	}
 
-	const hashedPassword = await bcrypt.hash(password, 10);
-
 	const newUser = new User({
 		email,
-		password: hashedPassword,
+		password,
 		username,
 	});
 	const { hashedToken, unHashedToken, tokenExpiry } =
@@ -95,8 +94,7 @@ const loginTheUser = asyncHandler(async (req, res, next) => {
 		const err = new ApiError(400, "Invalid credentials");
 		return next(err);
 	}
-	// const hashedPass = await bcrypt.hash(password, 10);
-	// console.log(hashedPass);
+
 	const isPasswordValid = await existingUser.isPasswordCorrect(password);
 
 	if (!isPasswordValid) {
@@ -104,9 +102,12 @@ const loginTheUser = asyncHandler(async (req, res, next) => {
 		return next(err);
 	}
 
-	const { AccessToken, RefreshToken } = generateAccessAndRefreshTokens(
+	const { AccessToken, RefreshToken } = await generateAccessAndRefreshTokens(
 		existingUser._id,
 	);
+
+	console.log("1:", AccessToken);
+	console.log("2:", RefreshToken);
 
 	const cookieOptions = {
 		httpOnly: true,
