@@ -11,22 +11,22 @@ import {
 } from "../utils/mail.js";
 import jwt from "jsonwebtoken";
 
-const generateAccessAndRefreshToken = async (userId) => {
-	try {
-		const existingUser = await User.findById(userId);
-		const accessToken = existingUser.generateAccessToken();
-		const refreshToken = existingUser.generateRefreshToken();
-		existingUser.refreshToken = refreshToken;
-		await existingUser.save({ validateBeforeSave: false });
+// const generateAccessAndRefreshToken = async (userId) => {
+// 	try {
+// 		const existingUser = await User.findById(userId);
+// 		const accessToken = existingUser.generateAccessToken();
+// 		const refreshToken = existingUser.generateRefreshToken();
+// 		existingUser.refreshToken = refreshToken;
+// 		await existingUser.save({ validateBeforeSave: false });
 
-		return { accessToken, refreshToken };
-	} catch (error) {
-		throw new ApiError(
-			500,
-			"Something went wrong while generating refresh and access token",
-		);
-	}
-};
+// 		return { accessToken, refreshToken };
+// 	} catch (error) {
+// 		throw new ApiError(
+// 			500,
+// 			"Something went wrong while generating refresh and access token",
+// 		);
+// 	}
+// };
 
 const registerUser = asyncHandler(async (req, res, next) => {
 	const { email, username, password } = req.body;
@@ -82,98 +82,98 @@ const registerUser = asyncHandler(async (req, res, next) => {
 	return res.status(response.statusCode).json(response);
 });
 
-const loginUserYoutube = asyncHandler(async (req, res, next) => {
-	const { username, email, password } = req.body;
+// const loginUserYoutube = asyncHandler(async (req, res, next) => {
+// 	const { username, email, password } = req.body;
 
-	if (!username && !email) {
-		throw new ApiError(400, "Username or password is required");
-	}
+// 	if (!username && !email) {
+// 		throw new ApiError(400, "Username or password is required");
+// 	}
 
-	const existingUser = User.findOne({
-		$or: [{ username }, { email }],
-	});
+// 	const existingUser = User.findOne({
+// 		$or: [{ username }, { email }],
+// 	});
 
-	if (!existingUser) {
-		throw new ApiError(404, "user does not exist");
-	}
+// 	if (!existingUser) {
+// 		throw new ApiError(404, "user does not exist");
+// 	}
 
-	const isPasswordValid = await existingUser.isPasswordCorrect(password);
+// 	const isPasswordValid = await existingUser.isPasswordCorrect(password);
 
-	if (!isPasswordValid) {
-		throw new ApiError(401, "Invalid user credentials");
-	}
+// 	if (!isPasswordValid) {
+// 		throw new ApiError(401, "Invalid user credentials");
+// 	}
 
-	const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
-		existingUser._id,
-	);
+// 	const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+// 		existingUser._id,
+// 	);
 
-	const loggedInUser = await User.findById(existingUser._id).select(
-		"-password -refreshToken",
-	);
+// 	const loggedInUser = await User.findById(existingUser._id).select(
+// 		"-password -refreshToken",
+// 	);
 
-	const options = {
-		httpOnly: true,
-		secure: true,
-	};
+// 	const options = {
+// 		httpOnly: true,
+// 		secure: true,
+// 	};
 
-	return res
-		.status(200)
-		.cookie("accessToken", accessToken, options)
-		.cookie("refreshToken", refreshToken, options)
-		.json(
-			new ApiResponse(
-				200,
-				{
-					user: loggedInUser,
-					accessToken,
-					refreshToken,
-				},
-				"User logged in successfully",
-			),
-		);
-});
+// 	return res
+// 		.status(200)
+// 		.cookie("accessToken", accessToken, options)
+// 		.cookie("refreshToken", refreshToken, options)
+// 		.json(
+// 			new ApiResponse(
+// 				200,
+// 				{
+// 					user: loggedInUser,
+// 					accessToken,
+// 					refreshToken,
+// 				},
+// 				"User logged in successfully",
+// 			),
+// 		);
+// });
 
-const loginUser = asyncHandler(async (req, res, next) => {
-	const { email, password } = req.body;
+// const loginUser = asyncHandler(async (req, res, next) => {
+// 	const { email, password } = req.body;
 
-	const existingUser = User.findOne({ email });
+// 	const existingUser = User.findOne({ email });
 
-	if (!existingUser) {
-		return next(
-			new ApiError(
-				400,
-				"Email not registerered. Please register before trying to login",
-			),
-		);
-	}
+// 	if (!existingUser) {
+// 		return next(
+// 			new ApiError(
+// 				400,
+// 				"Email not registerered. Please register before trying to login",
+// 			),
+// 		);
+// 	}
 
-	const isPasswordCorrect = await bcrypt.compare(
-		password,
-		existingUser.password,
-	);
+// 	const isPasswordCorrect = await bcrypt.compare(
+// 		password,
+// 		existingUser.password,
+// 	);
 
-	if (!isPasswordCorrect) {
-		return next(new ApiError(400, "User Credentials wrong"));
-	}
+// 	if (!isPasswordCorrect) {
+// 		return next(new ApiError(400, "User Credentials wrong"));
+// 	}
 
-	const payload = { id: existingUser._id };
-	const secret = process.env.ACCESS_TOKEN_SECRET;
+// 	const payload = { id: existingUser._id };
+// 	const secret = process.env.ACCESS_TOKEN_SECRET;
 
-	const token = jwt.sign(payload, secret, {
-		expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
-	});
+// 	const token = jwt.sign(payload, secret, {
+// 		expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+// 	});
 
-	const cookieOptions = {
-		httpOnly: true, //cookie in control of backend....normal user cannot change it
-		secure: true,
-		maxAge: 24 * 60 * 60 * 1000,
-	};
-	res.cookie("token", token, cookieOptions);
+// 	const cookieOptions = {
+// 		httpOnly: true, //cookie in control of backend....normal user cannot change it
+// 		secure: true,
+// 		maxAge: 24 * 60 * 60 * 1000,
+// 	};
+// 	res.cookie("token", token, cookieOptions);
 
-	const response = new ApiResponse(200, { message: "Login Successful" });
+// 	const response = new ApiResponse(200, { message: "Login Successful" });
 
-	return res.status(response.statusCode).json(response);
-});
+// 	return res.status(response.statusCode).json(response);
+// });
 
 const logoutUser = asyncHandler(async (req, res, next) => {});
 

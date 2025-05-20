@@ -10,7 +10,7 @@
 --> "type" : "module" <- in package.json
 --> .env & .env.example
 
---> public folder <- files taken from user are put here tempporarily || folder used for public purpose
+--> public folder <- files taken from user are put here temporarily || folder used for public purpose
 --> .gitkeep <- to push empty folder on github
 
 --> src <- all code in this folder
@@ -82,7 +82,7 @@ examples -> look later when you have experimented on your own : in all the examp
 1. run node in root folder of the project-> node ./src/index.js and inside dotenv path give "../.env" -> will give error while "./.env" does not give error becaue cwd is root folder and all paths are calulated from the cwd
 2. run node in src folder -> cd src -> node index.js -> now "../.env" will not give error and "./.env" -> will give error
 
-All this happens from whichever folder node process is started that becomes the cwd and dotenv is imported in the process and relative to this process's location, dotenv tries to read the .env file based on the path given in config() and finally after reading the .env file the variables are set in process.env object
+All this happens because from whichever folder node process is started that becomes the cwd and dotenv is imported in the process and relative to this process's location, dotenv tries to read the .env file based on the path given in config() and finally after reading the .env file the variables are set in process.env object
 
 --> Write aysncHandler in utils to eliminate the need for using try catch in functions or for efficient error handling
 
