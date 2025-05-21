@@ -15,8 +15,8 @@ const generateAccessAndRefreshTokens = async (userId) => {
 	try {
 		const userFromDB = await User.findById(userId);
 
-		const AccessToken = await userFromDB.generateAccessToken();
-		const RefreshToken = await userFromDB.generateRefreshToken();
+		const AccessToken = userFromDB.generateAccessToken();
+		const RefreshToken = userFromDB.generateRefreshToken();
 		console.log(`Access token is : ${AccessToken}`);
 		console.log(`Refresh token is : ${RefreshToken}`);
 		userFromDB.refreshToken = RefreshToken;
@@ -68,7 +68,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
 		subject: "Please verify your email address to complete signup",
 		genContent: emailVerificationGenerateContent(
 			username,
-			"https://www.shanticarbons.com",
+			`http://localhost:${process.env.PORT}/api/v1/auth/verify/${unHashedToken}`,
 		),
 	};
 	const emailsent = await sendmail(mailOptions);
@@ -177,7 +177,7 @@ const generateNewAccessTokenAndRefreshToken = asyncHandler(
 			throw new ApiError(400, "User not found");
 		}
 
-		const { AccessToken, RefreshToken } = generateAccessAndRefreshTokens(
+		const { AccessToken, RefreshToken } = await generateAccessAndRefreshTokens(
 			userFromDB._id,
 		);
 
@@ -204,7 +204,44 @@ const generateNewAccessTokenAndRefreshToken = asyncHandler(
 	},
 );
 
-const verifyEmail = asyncHandler(async (req, res, next) => {});
+const verifyEmail = asyncHandler(async (req, res, next) => {
+	const { verifytoken } = req.params;
+
+	const hashedToken = crypto
+		.createHash("sha256")
+		.update(verifytoken)
+		.digest("hex");
+
+	const userFromDB = await User.findOne({
+		emailVerificationToken: hashedToken,
+	});
+
+	if (!userFromDB) {
+		throw new ApiError(400, "Token not valid");
+	}
+
+	const timeRightNow = Date.now();
+	const expiryTime = userFromDB.emailVerificationExpiry;
+	const canVerify = expiryTime - timeRightNow > 0 ? true : false;
+
+	if (!canVerify) {
+		throw new ApiError(400, "Token Expired");
+	}
+
+	userFromDB.isEmailVerified = true;
+	userFromDB.emailVerificationToken = undefined;
+	userFromDB.emailVerificationExpiry = undefined;
+	const updatedUser = await userFromDB.save();
+	return res.status(200).json(
+		new ApiResponse(
+			200,
+			{
+				user: updatedUser,
+			},
+			"Email verified successfully",
+		),
+	);
+});
 
 const resendVerificationEmail = asyncHandler(async (req, res, next) => {});
 
@@ -213,4 +250,5 @@ export {
 	loginTheUser,
 	logoutUser,
 	generateNewAccessTokenAndRefreshToken,
+	verifyEmail,
 };

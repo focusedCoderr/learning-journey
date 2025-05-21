@@ -10,6 +10,7 @@ import {
 	loginTheUser,
 	logoutUser,
 	generateNewAccessTokenAndRefreshToken,
+	verifyEmail,
 } from "../controllers/auth.controllers.js";
 import { verifyJWT } from "../middlewares/authFinal.middlewares.js";
 
@@ -23,6 +24,8 @@ router.route("/login").post(userLoginValidator(), validate, loginTheUser);
 
 router.route("/logout").post(verifyJWT, logoutUser);
 
-router.route("/getAccessToken").post(generateNewAccessTokenAndRefreshToken);
+router.route("/getAccessToken").get(generateNewAccessTokenAndRefreshToken);
+
+router.route("/verify/:verifytoken").get(verifyEmail);
 
 export default router;

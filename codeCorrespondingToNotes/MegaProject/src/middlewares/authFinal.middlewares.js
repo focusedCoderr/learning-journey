@@ -6,7 +6,6 @@ import { User } from "../models/user.models.js";
 const verifyJWT = async (req, res, next) => {
 	try {
 		const accessToken = req.cookies?.accessToken;
-
 		if (!accessToken) {
 			return next(new ApiError(400, "User not logged In"));
 		}
@@ -15,6 +14,7 @@ const verifyJWT = async (req, res, next) => {
 			accessToken,
 			process.env.ACCESS_TOKEN_SECRET,
 		);
+
 		if (!decodedData) {
 			return next(new ApiError(400, "Not a valid token"));
 		}
@@ -24,7 +24,7 @@ const verifyJWT = async (req, res, next) => {
 		if (!userFromDB) {
 			return next(new ApiError(400, "Wrong Token"));
 		}
-		res.user = userFromDB;
+		req.user = userFromDB;
 
 		next();
 	} catch (error) {
