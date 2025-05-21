@@ -11,6 +11,9 @@ import {
 	logoutUser,
 	generateNewAccessTokenAndRefreshToken,
 	verifyEmail,
+	resendVerificationEmail,
+	forgotPassword,
+	resetPassword,
 } from "../controllers/auth.controllers.js";
 import { verifyJWT } from "../middlewares/authFinal.middlewares.js";
 
@@ -27,5 +30,10 @@ router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/getAccessToken").get(generateNewAccessTokenAndRefreshToken);
 
 router.route("/verify/:verifytoken").get(verifyEmail);
+
+router.route("/newverificationtoken").post(resendVerificationEmail);
+
+router.route("/forgotPass").post(forgotPassword);
+router.route("/resetPass/:otp").post(resetPassword);
 
 export default router;

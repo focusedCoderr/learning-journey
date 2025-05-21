@@ -102,6 +102,9 @@ const loginTheUser = asyncHandler(async (req, res, next) => {
 		return next(err);
 	}
 
+	if (!existingUser.isEmailVerified) {
+		throw new ApiError(400, "Please verify your email first");
+	}
 	const { AccessToken, RefreshToken } = await generateAccessAndRefreshTokens(
 		existingUser._id,
 	);
@@ -243,7 +246,101 @@ const verifyEmail = asyncHandler(async (req, res, next) => {
 	);
 });
 
-const resendVerificationEmail = asyncHandler(async (req, res, next) => {});
+const resendVerificationEmail = asyncHandler(async (req, res, next) => {
+	const email = req.body.email;
+	const username = req.body.username;
+
+	const userFromDB = await User.findOne({
+		$or: [{ email }, { username }],
+	});
+
+	if (!userFromDB) {
+		throw new ApiError(
+			400,
+			"Email or username not registered. Please register first",
+		);
+	}
+
+	const timeRightNow = Date.now();
+	const verificationTokenExpiry = userFromDB.emailVerificationExpiry;
+	if (verificationTokenExpiry - timeRightNow > 0) {
+		throw new ApiError(
+			400,
+			"Earlier token is still valid. Please verify from previously sent verification token",
+		);
+	}
+
+	const { hashedToken, unHashedToken, tokenExpiry } =
+		userFromDB.generateTemporaryToken();
+
+	userFromDB.emailVerificationToken = hashedToken;
+	userFromDB.emailVerificationExpiry = tokenExpiry;
+	await userFromDB.save();
+
+	const mailOptions = {
+		email,
+		subject: "Here is your new verification link",
+		genContent: emailVerificationGenerateContent(
+			username,
+			`http://localhost:${process.env.PORT}/api/v1/auth/verify/${unHashedToken}`,
+		),
+	};
+	const emailsent = await sendmail(mailOptions);
+	return res
+		.status(200)
+		.json(new ApiResponse(200, {}, "New verification link generated and sent"));
+});
+
+const forgotPassword = asyncHandler(async (req, res, next) => {
+	const { email, username } = req.body;
+
+	const userFromDB = await User.findOne({
+		$or: [{ email }, { username }],
+	});
+
+	if (!userFromDB) {
+		throw new ApiError(400, "USER DOES NOT EXIST. PLEASE REGISTER FIRST");
+	}
+
+	const otp = crypto.randomBytes(3).toString("hex");
+	const expiry = Date.now() + 1000 * 60 * 20;
+	userFromDB.forgotPasswordToken = otp;
+	userFromDB.forgotPasswordExpiry = expiry;
+
+	const updatedUser = await userFromDB.save();
+	const mailOptions = {
+		email,
+		subject: "Please click the link to reset the password",
+		genContent: forgotPasswordGenerateContent(
+			username,
+			`http://localhost:${process.env.PORT}/api/v1/auth/resetPass/${otp}`,
+		),
+	};
+	const emailSent = await sendmail(mailOptions);
+
+	return res
+		.status(200)
+		.json(
+			new ApiResponse(
+				200,
+				{ user: updatedUser },
+				"Reset password link sent on email",
+			),
+		);
+});
+
+const resetPassword = asyncHandler(async (req, res, next) => {
+	const { newPass, confNewPass } = req.body;
+	const { otp } = req.params;
+
+	if (newPass !== confNewPass) {
+		throw new ApiError(400, "Passwords do not match");
+	}
+
+	if (!otp) {
+		throw new ApiError(400, "Invalid otp");
+	}
+});
 
 export {
 	registerUser,
@@ -251,4 +348,7 @@ export {
 	logoutUser,
 	generateNewAccessTokenAndRefreshToken,
 	verifyEmail,
+	resendVerificationEmail,
+	forgotPassword,
+	resetPassword,
 };
